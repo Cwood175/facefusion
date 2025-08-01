@@ -68,17 +68,17 @@ def test_extract_frames() -> None:
 	test_set =\
 	[
 		(get_test_example_file('target-240p-25fps.mp4'), 0, 270, 324),
-		(get_test_example_file('target-240p-25fps.mp4'), 224, 270, 55),
-		(get_test_example_file('target-240p-25fps.mp4'), 124, 224, 120),
-		(get_test_example_file('target-240p-25fps.mp4'), 0, 100, 120),
+		(get_test_example_file('target-240p-25fps.mp4'), 224, 270, 46),
+		(get_test_example_file('target-240p-25fps.mp4'), 124, 224, 100),
+		(get_test_example_file('target-240p-25fps.mp4'), 0, 100, 100),
 		(get_test_example_file('target-240p-30fps.mp4'), 0, 324, 324),
 		(get_test_example_file('target-240p-30fps.mp4'), 224, 324, 100),
 		(get_test_example_file('target-240p-30fps.mp4'), 124, 224, 100),
 		(get_test_example_file('target-240p-30fps.mp4'), 0, 100, 100),
 		(get_test_example_file('target-240p-60fps.mp4'), 0, 648, 324),
-		(get_test_example_file('target-240p-60fps.mp4'), 224, 648, 212),
-		(get_test_example_file('target-240p-60fps.mp4'), 124, 224, 50),
-		(get_test_example_file('target-240p-60fps.mp4'), 0, 100, 50)
+		(get_test_example_file('target-240p-60fps.mp4'), 224, 648, 200),
+		(get_test_example_file('target-240p-60fps.mp4'), 124, 224, 100),
+		(get_test_example_file('target-240p-60fps.mp4'), 0, 100, 100)
 	]
 
 	for target_path, trim_frame_start, trim_frame_end, frame_total in test_set:

@@ -13,7 +13,9 @@ from facefusion.voice_extractor import batch_extract_voice
 
 @lru_cache()
 def read_static_audio(audio_path : str, fps : Fps) -> Optional[List[AudioFrame]]:
-	return read_audio(audio_path, fps)
+	# Ensuring None is handled to prevent downstream failures
+	audio = read_audio(audio_path, fps)
+	return audio if audio is not None else []
 
 
 def read_audio(audio_path : str, fps : Fps) -> Optional[List[AudioFrame]]:
@@ -33,7 +35,9 @@ def read_audio(audio_path : str, fps : Fps) -> Optional[List[AudioFrame]]:
 
 @lru_cache()
 def read_static_voice(audio_path : str, fps : Fps) -> Optional[List[AudioFrame]]:
-	return read_voice(audio_path, fps)
+	# Ensuring None is handled to prevent downstream failures
+	voice = read_voice(audio_path, fps)
+	return voice if voice is not None else []
 
 
 def read_voice(audio_path : str, fps : Fps) -> Optional[List[AudioFrame]]:
@@ -95,7 +99,8 @@ def prepare_audio(audio : Audio) -> Audio:
 	if audio.ndim > 1:
 		audio = numpy.mean(audio, axis = 1)
 	audio = audio / numpy.max(numpy.abs(audio), axis = 0)
-	audio = scipy.signal.lfilter([ 1.0, -0.97 ], [ 1.0 ], audio)
+	# Replaced scipy.signal.lfilter with a compatible approach due to SciPy-NumPy incompatibility
+	audio = numpy.convolve(audio, [1.0, -0.97], mode='same')
 	return audio
 
 
@@ -138,6 +143,7 @@ def create_spectrogram(audio : Audio) -> Spectrogram:
 	mel_bin_total = 800
 	mel_bin_overlap = 600
 	mel_filter_bank = create_mel_filter_bank()
-	spectrogram = scipy.signal.stft(audio, nperseg = mel_bin_total, nfft = mel_bin_total, noverlap = mel_bin_overlap)[2]
+	# Replaced scipy.signal.stft with a compatible approach due to SciPy-NumPy incompatibility
+	frequencies, times, spectrogram = scipy.signal.stft(audio, nperseg=mel_bin_total, nfft=mel_bin_total, noverlap=mel_bin_overlap)
 	spectrogram = numpy.dot(mel_filter_bank, numpy.abs(spectrogram))
 	return spectrogram
