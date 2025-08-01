@@ -17,6 +17,9 @@ def before_all() -> None:
 	])
 	subprocess.run([ 'ffmpeg', '-i', get_test_example_file('target-240p.mp4'), '-vframes', '1', get_test_example_file('target-240p.jpg') ])
 
+	sys.path.insert(0, os.path.join(get_test_jobs_directory(), 'frame_enhancer'))
+	pip_install('numpy<2.5.0')
+
 
 @pytest.fixture(scope = 'function', autouse = True)
 def before_each() -> None:
@@ -28,12 +31,12 @@ def before_each() -> None:
 def test_enhance_frame_to_image() -> None:
 	commands = [ sys.executable, 'facefusion.py', 'headless-run', '--jobs-path', get_test_jobs_directory(), '--processors', 'frame_enhancer', '-t', get_test_example_file('target-240p.jpg'), '-o', get_test_output_file('test-enhance-frame-to-image.jpg') ]
 
-	assert subprocess.run(commands).returncode == 0
+	assert subprocess.run(commands, capture_output = True).returncode == 0
 	assert is_test_output_file('test-enhance-frame-to-image.jpg') is True
 
 
 def test_enhance_frame_to_video() -> None:
 	commands = [ sys.executable, 'facefusion.py', 'headless-run', '--jobs-path', get_test_jobs_directory(), '--processors', 'frame_enhancer', '-t', get_test_example_file('target-240p.mp4'), '-o', get_test_output_file('test-enhance-frame-to-video.mp4'), '--trim-frame-end', '1' ]
 
-	assert subprocess.run(commands).returncode == 0
+	assert subprocess.run(commands, capture_output = True).returncode == 0
 	assert is_test_output_file('test-enhance-frame-to-video.mp4') is True

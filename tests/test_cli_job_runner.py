@@ -1,5 +1,6 @@
 import subprocess
 import sys
+import warnings
 
 import pytest
 
@@ -9,6 +10,16 @@ from .helper import get_test_example_file, get_test_examples_directory, get_test
 
 
 @pytest.fixture(scope = 'module', autouse = True)
+def before_all() -> None:
+	warnings.simplefilter('ignore', UserWarning)
+	commands = [ sys.executable, 'facefusion.py', 'job-run', 'test-job-run', '--jobs-path', get_test_jobs_directory() ]
+
+	assert subprocess.run(commands).returncode == 1
+
+	commands = [ sys.executable, 'facefusion.py', 'job-create', 'test-job-run', '--jobs-path', get_test_jobs_directory() ]
+	subprocess.run(commands)
+
+	commands = [ sys.executable, 'facefusion.py', 'job-add-step', 'test-job-run', '--jobs-path', get_test_jobs_directory(), '--processors', 'face_debugger', '-t', get_test_example_file('target-240p.jpg'), '-o', get_test_output_file('test-job-run.jpg') ]
 def before_all() -> None:
 	conditional_download(get_test_examples_directory(),
 	[

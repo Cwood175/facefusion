@@ -4,6 +4,9 @@ from typing import Tuple
 import numpy
 import scipy
 
+if numpy.__version__ >= '2.5.0':
+    raise ImportError('facefusion requires NumPy <2.5.0 due to SciPy incompatibility; please downgrade NumPy to use voice extraction')
+
 from facefusion import inference_manager, state_manager
 from facefusion.download import conditional_download_hashes, conditional_download_sources, resolve_download_url
 from facefusion.filesystem import resolve_relative_path

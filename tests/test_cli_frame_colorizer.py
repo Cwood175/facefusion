@@ -36,5 +36,5 @@ def test_colorize_frame_to_image() -> None:
 def test_colorize_frame_to_video() -> None:
 	commands = [ sys.executable, 'facefusion.py', 'headless-run', '--jobs-path', get_test_jobs_directory(), '--processors', 'frame_colorizer', '-t', get_test_example_file('target-240p-0sat.mp4'), '-o', get_test_output_file('test-colorize-frame-to-video.mp4'), '--trim-frame-end', '1' ]
 
-	assert subprocess.run(commands).returncode == 0
+	assert subprocess.run(commands, check=True).returncode == 0
 	assert is_test_output_file('test-colorize-frame-to-video.mp4') is True

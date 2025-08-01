@@ -35,5 +35,6 @@ def test_edit_face_to_image() -> None:
 def test_edit_face_to_video() -> None:
 	commands = [ sys.executable, 'facefusion.py', 'headless-run', '--jobs-path', get_test_jobs_directory(), '--processors', 'face_editor', '-t', get_test_example_file('target-240p.mp4'), '-o', get_test_output_file('test-edit-face-to-video.mp4'), '--trim-frame-end', '1' ]
 
-	assert subprocess.run(commands).returncode == 0
+	process = subprocess.run(commands)
+	assert process.returncode == 0
 	assert is_test_output_file('test-edit-face-to-video.mp4') is True
